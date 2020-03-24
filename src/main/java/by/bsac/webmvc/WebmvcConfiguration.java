@@ -1,9 +1,13 @@
 package by.bsac.webmvc;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -75,6 +79,21 @@ public class WebmvcConfiguration implements WebMvcConfigurer {
 
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(SpringTemplateEngine.class)));
         return engine;
+    }
+
+    @Bean("jacksonObjectMapper")
+    @Primary
+    public ObjectMapper getObjectMapper() {
+
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(ObjectMapper.class)));
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(ObjectMapper.class)));
+        return mapper;
+
     }
 
     @Override
