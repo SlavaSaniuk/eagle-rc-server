@@ -6,6 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
 public class ProjectsCrudServiceImpl implements ProjectsCrudService {
@@ -38,5 +42,10 @@ public class ProjectsCrudServiceImpl implements ProjectsCrudService {
     @Override
     public Project getById(Integer id) {
         return null;
+    }
+
+    @Override
+    public List<Project> getAllProjects() {
+        return (List<Project>) this.projects_repository.findAll();
     }
 }

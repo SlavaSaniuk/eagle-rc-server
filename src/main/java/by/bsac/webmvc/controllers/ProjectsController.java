@@ -6,10 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
@@ -31,9 +30,15 @@ public class ProjectsController {
         this.PROJECTS_SERVICE = a_projects_service;
     }
 
-    @GetMapping(value = "/project_create", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/project_create", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Project createProjects(@RequestBody Project project) {
         return this.PROJECTS_SERVICE.create(project);
+    }
+
+    @GetMapping(value = "/project_get_all", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<Project> getProjects() {
+        return this.PROJECTS_SERVICE.getAllProjects();
     }
 }

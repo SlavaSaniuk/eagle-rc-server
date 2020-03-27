@@ -2,6 +2,7 @@ package by.bsac.controllers;
 
 import by.bsac.Main;
 import by.bsac.domain.models.Project;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -59,5 +63,26 @@ public class ProjectsControllerIntegrationTests {
 
         LOGGER.debug("CREATED PROJECT: " +CREATED);
 
+    }
+
+    @Test
+    void getProjects_fewProjectsExist_shouldReturnProjects() throws Exception {
+
+        String RESP_JSON = this.MVC.perform(
+                MockMvcRequestBuilders.get("/project_get_all")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print(System.out))
+                .andReturn().getResponse().getContentAsString();
+
+        Assertions.assertNotNull(RESP_JSON);
+        LOGGER.debug("Response JSON" +RESP_JSON);
+
+        List<Project> projects = this.MAPPER.readValue(RESP_JSON, new TypeReference<List<Project>>() {});
+        Assertions.assertNotNull(projects);
+
+        LOGGER.debug("Projects: ");
+        projects.forEach(p -> LOGGER.debug(p.toString()));
     }
 }
